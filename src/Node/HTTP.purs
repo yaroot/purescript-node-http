@@ -10,6 +10,7 @@ module Node.HTTP
   , close
   , ListenOptions
   , listenSocket
+  , serverPort
 
   , httpVersion
   , requestHeaders
@@ -49,6 +50,8 @@ foreign import listenImpl :: Server -> Int -> String -> Nullable Int -> Effect U
 
 foreign import closeImpl :: Server -> Effect Unit -> Effect Unit
 
+foreign import serverPortImpl :: Server -> Effect Int
+
 -- | Listen on a port in order to start accepting HTTP requests. The specified callback will be run when setup is complete.
 listen :: Server -> ListenOptions -> Effect Unit -> Effect Unit
 listen server opts done = listenImpl server opts.port opts.hostname (toNullable opts.backlog) done
@@ -56,6 +59,9 @@ listen server opts done = listenImpl server opts.port opts.hostname (toNullable 
 -- | Close a listening HTTP server. The specified callback will be run the server closing is complete.
 close :: Server -> Effect Unit -> Effect Unit
 close server done = closeImpl server done
+
+serverPort :: Server -> Effect Int
+serverPort = serverPortImpl
 
 -- | Options to be supplied to `listen`. See the [Node API](https://nodejs.org/dist/latest-v6.x/docs/api/http.html#http_server_listen_handle_callback) for detailed information about these.
 type ListenOptions =

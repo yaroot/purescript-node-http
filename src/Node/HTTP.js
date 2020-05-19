@@ -36,6 +36,12 @@ exports.closeImpl = function (server) {
   };
 };
 
+exports.serverPortImpl = function(server) {
+  return function() {
+    return server.address().port
+  }
+}
+
 exports.listenSocket = function (server) {
   return function (path) {
     return function (done) {
